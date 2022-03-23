@@ -1,0 +1,1 @@
+% decrypt passed text with entered password
