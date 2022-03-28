@@ -1,5 +1,7 @@
+clc; close all; clear;
+
 % variable declaration
-username = 'user';
+username = 'user'; header = '';
 
 % text interface
 while true
@@ -33,6 +35,10 @@ while true
 
     % text message
     else
-        fprintf('normal text\n')
+        % convert text into array of binary ascii
+        msg_bin = ascii_convert(entered_text);
     end
+
+    % code for passing msg_bin to the machine
+
 end
