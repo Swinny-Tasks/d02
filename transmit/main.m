@@ -1,7 +1,7 @@
 clc; close all; clear;
 
 % variable declaration
-username = 'user'; header = '';
+username = 'user'; header = 100;
 
 % text interface
 while true
@@ -20,7 +20,7 @@ while true
 
     % change username
     elseif iscmd('name', entered_text)
-      username = entered_text(5:end);
+      username = entered_text(7:end);
 
     % exit the program
     elseif iscmd('exit', entered_text)
