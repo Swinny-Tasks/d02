@@ -6,11 +6,11 @@ function [extra_info, message] = text_filter(expected, text)
   elseif expected == 'save'
       borders = ['{', '}'];
   end
-  starting = find(text == borders(1, 1))
-  ending = find(text == borders(1, 2))
+  starting = find(text == borders(1, 1));
+  ending = find(text == borders(1, 2));
 
-  extra_info = text(starting+1, ending -1 );
-  message = text(ending + 1, end);
+  extra_info = text(1, (starting+1):(ending-1) );
+  message = text(1, (ending+1):end);
 
   fprintf('%s\n%s', extra_info, message)
 end
