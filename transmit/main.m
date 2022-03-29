@@ -1,5 +1,3 @@
-clc; close all; clear;
-
 % variable declaration
 username = 'user'; header = 100;
 
@@ -8,35 +6,36 @@ while true
   fprintf(2, '\n[%s] $', username);
   entered_text = input(' ', 's');
     
-  % empty input
-  if size(entered_text) == 0
+  if size(entered_text) == 0                                  % empty input
     continue
 
-  % possible command
-  elseif entered_text(1) == '!'
-    % clear console
-    if iscmd('clc', entered_text)
+  elseif entered_text(1) == '!'                          % possible command
+    if iscmd('encrypt', entered_text)                     % encrypt message
+      %TODO add code for encrypting text
+    end
+
+    if iscmd('clc', entered_text)                           % clear console
       clc
 
-    % change username
-    elseif iscmd('name', entered_text)
+    elseif iscmd('help', entered_text)                       % help command
+
+
+    elseif iscmd('name', entered_text)                    % change username
       username = entered_text(7:end);
 
-    % exit the program
-    elseif iscmd('exit', entered_text)
+    elseif iscmd('exit', entered_text)                   % exit the program
       fprintf('\nThank you for using d02\n\n\n');
       break
 
-    % not a command
-    else
-      fprintf(2, '\nINVALID COMMAND\n');
-      fprintf('Type !h to get list of all commands\n');
+    elseif iscmd('save', entered_text)          % save msg/cypher in a file
+      %
+
     end
 
     % text message
   else
     % convert text into array of binary ascii
-    msg_bin = ascii_convert(entered_text);
+    msg_bin = ascii_convert(entered_text, 'plain');
   end
 
   % code for passing msg_bin to the machine
