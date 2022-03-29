@@ -11,7 +11,10 @@ while true
 
   elseif entered_text(1) == '!'                          % possible command
     if iscmd('encrypt', entered_text)                     % encrypt message
-      %TODO add code for encrypting text
+      [pass, message] = text_filter('encrypt', entered_text);
+      msg_hex = [encrypt(pass, pass), encrypt(message, pass)];
+
+      msg_bin = ascii_convert(msg_hex, 'encrypted');
     end
 
     if iscmd('clc', entered_text)                           % clear console
