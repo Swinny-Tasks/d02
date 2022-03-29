@@ -1,9 +1,9 @@
 % extract additional info from the message string
 function [extra_info, message] = text_filter(expected, text)
   % extra info would be either password or file name
-  if expected == 'encrypt'
+  if isequal(expected, 'encrypt')
       borders = ['[', ']'];
-  elseif expected == 'save'
+  elseif isequal(expected, 'save')
       borders = ['{', '}'];
   end
   starting = find(text == borders(1, 1));
@@ -12,5 +12,5 @@ function [extra_info, message] = text_filter(expected, text)
   extra_info = text(1, (starting+1):(ending-1) );
   message = text(1, (ending+1):end);
 
-  fprintf('%s\n%s', extra_info, message)
+  fprintf('%s\n%s\n', extra_info, message)
 end
