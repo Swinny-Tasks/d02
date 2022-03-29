@@ -18,7 +18,13 @@ while true
       clc
 
     elseif iscmd('help', entered_text)                       % help command
-
+      fprintf(2, 'command\tfunction\n');
+      fprintf('!help\t\t\tget list of all commands\n');
+      fprintf('![pass]message\tencrypt message with password\n');
+      fprintf('!{file}message\tsave message in a file\n');
+      fprintf('!clc\t\t\tclear your console\n');
+      fprintf('!sos\t\t\tsend SOS in morse\n');
+      fprintf('!exit\t\t\tleave the program\n')
 
     elseif iscmd('name', entered_text)                    % change username
       username = entered_text(7:end);
