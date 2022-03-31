@@ -111,6 +111,10 @@ while true
       fprintf('\nThank you for using d02\n\n\n');
       break
 
+    elseif ~is_encrypted
+        fprintf(2, '\n\t\t ! INVALID COMMAND !\n');
+        disp('Type !help to get list of all commands.')
+
     end
 
 
