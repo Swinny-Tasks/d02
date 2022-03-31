@@ -1,52 +1,97 @@
+clc; close all; clear;
+disp('     _  ___ ____');
+disp('  __| |/ _ |___ \');
+disp(' / _` | | | |__) |');
+disp('| (_| | |_| / __/');
+disp(' \__,_|\___|_____|');
+
 % variable declaration
-username = 'user'; header = 100;
+username = 'user';
 
 % text interface
 while true
   fprintf(2, '\n[%s] $', username);
   entered_text = input(' ', 's');
-    
-  if size(entered_text) == 0                                  % empty input
+  is_msg = true; header = '000';
+
+
+  % if empty input
+  if size(entered_text) == 0
+    is_msg = false;
     continue
 
-  elseif entered_text(1) == '!'                          % possible command
-    if iscmd('encrypt', entered_text)                     % encrypt message
+
+  % check if possible command
+  elseif entered_text(1) == '!'
+
+    % cmd: encrypt message
+    if iscmd('encrypt', entered_text)
       [pass, message] = text_filter('encrypt', entered_text);
       msg_hex = [encrypt(pass, pass), encrypt(message, pass)];
 
       msg_bin = ascii_convert(msg_hex, 'encrypted');
     end
 
-    if iscmd('clc', entered_text)                           % clear console
-      clc
+    % cmd: save msg/cypher in local memory
+    if iscmd('saveL', entered_text)
+      is_msg = false;
 
-    elseif iscmd('help', entered_text)                       % help command
-      fprintf(2, 'command\tfunction\n');
-      fprintf('!help\t\t\tget list of all commands\n');
-      fprintf('![pass]message\tencrypt message with password\n');
-      fprintf('!{file}message\tsave message in a file\n');
-      fprintf('!clc\t\t\tclear your console\n');
-      fprintf('!sos\t\t\tsend SOS in morse\n');
-      fprintf('!exit\t\t\tleave the program\n')
+    % cmd: save msg/cypher in host memory
+    elseif iscmd('saveH', entered_text)
+      is_msg = false;
 
-    elseif iscmd('name', entered_text)                    % change username
+    % cmd: save msg/cypher in host memory
+    elseif iscmd('runL', entered_text)
+      %TODO add code
+
+    % cmd: save msg/cypher in host memory
+    elseif iscmd('runH', entered_text)
+      %TODO add code
+
+    % cmd: change username
+    elseif iscmd('name', entered_text)
       username = entered_text(7:end);
+      is_msg = false;
 
-    elseif iscmd('exit', entered_text)                   % exit the program
+    % cmd: display help menu
+    elseif iscmd('help', entered_text)
+      fprintf(2, 'command\t\t\t\tfunction\n');
+      fprintf('!help\t\t\t\tget list of all commands\n');
+      fprintf('![pass]message\t\tencrypt message with password\n');
+      fprintf('!{file}message\t\tsave message\\cmds in a local file\n');
+      fprintf('!{file}*message\t\tsave message\\cmds in a host file\n');
+      fprintf('!(file)\t\t\t\tsend content of a local file\n');
+      fprintf('!(file)*\t\t\tdisplay content of a host file\n');
+      fprintf('!!(file)\t\t\trun cmds from a local file\n');
+      fprintf('!!(file)*\t\t\teun cmds from a host file\n');
+      fprintf('!name\t\t\t\tchange your display name\n');
+      fprintf('!clc\t\t\t\tclear your console\n');
+      fprintf('!sos\t\t\t\tsend SOS in morse\n');
+      fprintf('!exit\t\t\t\tleave the program\n')
+      is_msg = false;
+
+    % cmd: clear console
+    elseif iscmd('clc', entered_text)
+      clc
+      is_msg = false;
+
+    % cmd: exit the program
+    elseif iscmd('exit', entered_text)
       fprintf('\nThank you for using d02\n\n\n');
       break
 
-    elseif iscmd('save', entered_text)          % save msg/cypher in a file
-      %
-
     end
 
-    % text message
+
+  % entered text is just a message
   else
-    % convert text into array of binary ascii
     msg_bin = ascii_convert(entered_text, 'plain');
   end
+  
 
-  % code for passing msg_bin to the machine
+  % do not send message if user enters local cmd
+  if is_msg                  
+    % code for passing msg_bin to the machine
+  end
 
 end
