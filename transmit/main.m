@@ -7,22 +7,27 @@ disp(' \__,_|\___|_____|');
 
 % variable declaration
 username = 'user';
+preamble = '';
+postamble = '';
 
 % text interface
 while true
   fprintf(2, '\n[%s] $', username);
   entered_text = input(' ', 's');
-  is_msg = true; header = '000';
+  
+  is_msg = false;       % would be true only if entered text should be sent
+  is_encrypted = false; % would be true if user encrypts their message
+  header = '000';       % would change depending on the type of message
+  extra = '';           % could contain other extra information
 
 
   % if empty input
   if size(entered_text) == 0
-    is_msg = false;
     continue
 
 
   % check if possible command
-  elseif entered_text(1) == '!'
+  elseif (entered_text(1) == '!' && length(entered_text) > 1)
 
     % cmd: encrypt message
     if iscmd('encrypt', entered_text)
@@ -30,28 +35,57 @@ while true
       msg_hex = [encrypt(pass, pass), encrypt(message, pass)];
 
       msg_bin = ascii_convert(msg_hex, 'encrypted');
+      is_msg = true; is_encrypted = true; header = '001';
     end
 
     % cmd: save msg/cypher in local memory
     if iscmd('saveL', entered_text)
-      is_msg = false;
-
-    % cmd: save msg/cypher in host memory
-    elseif iscmd('saveH', entered_text)
-      is_msg = false;
-
-    % cmd: save msg/cypher in host memory
-    elseif iscmd('runL', entered_text)
       %TODO add code
 
     % cmd: save msg/cypher in host memory
+    elseif iscmd('saveH', entered_text)
+      is_msg = true;
+      if is_encrypted
+          header = '011';
+      else
+          header = '010';
+      end
+      %TODO add save code
+
+    % cmd: load plain file from local memory
+    elseif iscmd('loadLP', entered_text)
+      header = '000';
+      %TODO add code
+
+    % cmd: load encrypted file from local memory
+    elseif iscmd('loadLE', entered_text)
+      header = '001';
+      %TODO add code
+
+    % cmd: load plain file from local memory
+    elseif iscmd('loadHP', entered_text)
+      header = '100';
+      %TODO add code
+
+    % cmd: load encrypted file from local memory
+    elseif iscmd('loadHE', entered_text)
+      header = '101';
+      %TODO add code
+
+    % cmd: run localy stored command
+    elseif iscmd('runL', entered_text)
+      header = '110';
+      %TODO add code
+
+    % cmd: run remotely stored command
     elseif iscmd('runH', entered_text)
+      header = '111';
+      is_msg = true;
       %TODO add code
 
     % cmd: change username
     elseif iscmd('name', entered_text)
       username = entered_text(7:end);
-      is_msg = false;
 
     % cmd: display help menu
     elseif iscmd('help', entered_text)
@@ -66,14 +100,11 @@ while true
       fprintf('!!(file)*\t\t\teun cmds from a host file\n');
       fprintf('!name\t\t\t\tchange your display name\n');
       fprintf('!clc\t\t\t\tclear your console\n');
-      fprintf('!sos\t\t\t\tsend SOS in morse\n');
       fprintf('!exit\t\t\t\tleave the program\n')
-      is_msg = false;
 
     % cmd: clear console
     elseif iscmd('clc', entered_text)
       clc
-      is_msg = false;
 
     % cmd: exit the program
     elseif iscmd('exit', entered_text)
@@ -86,11 +117,13 @@ while true
   % entered text is just a message
   else
     msg_bin = ascii_convert(entered_text, 'plain');
+    is_msg = true;
   end
   
 
   % do not send message if user enters local cmd
-  if is_msg                  
+  if is_msg
+    full_msg = [preamble, extra, header, msg_bin, postamble];
     % code for passing msg_bin to the machine
   end
 
