@@ -1,8 +1,8 @@
 function username = decode(bin_msg, username)
   
   % change name
-  if isequal(bin_msg(1, 1:4), '1110')
-    username = char_convert('plain', bin_msg(1, 4:end));
+  if isequal(bin_msg(1, 1:4), '0010')
+    username = char_convert(bin_msg(1, 4:end));
     fprintf(2, 'recieving messages from %s\n', username);
 
   % is command
@@ -11,7 +11,7 @@ function username = decode(bin_msg, username)
 
   % load command
   elseif  isequal('111', bin_msg(1, 1:3))
-    %TODO add code 
+    %TODO add code
 
   else
     header = bin_msg(1, 1:3);
@@ -22,7 +22,7 @@ function username = decode(bin_msg, username)
 
       % encrypted text
       case '001'
-        %TODO add code 
+        %TODO add code
 
       % normal text; store it as well
       case '010'
