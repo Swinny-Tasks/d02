@@ -22,7 +22,20 @@ function username = decode(bin_msg, username)
 
       % encrypted text
       case '001'
-        %TODO add code
+        right_pass = false;
+
+        fprintf(2, 'This is an encrypted message!\n');
+        while ~right_pass
+          pswd = input('Enter Password: ', 's');
+
+          % check password
+          if pswd == decrypt(pswd, text(1, 4:((length(pswd)*8)+ 3)))
+            right_pass = true;
+            break;
+          end
+
+        end
+
 
       % normal text; store it as well
       case '010'
