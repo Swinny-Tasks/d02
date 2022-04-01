@@ -15,31 +15,36 @@ function username = decode(bin_msg, username)
 
   else
     header = bin_msg(1, 1:3);
+    content = bin_msg(1, 4:end);
+    
     switch header
       % normal text
       case '000'
-        %TODO add code 
+        message = char_convert(content);
 
       % encrypted text
       case '001'
-        right_pass = false;
-
         fprintf(2, 'This is an encrypted message!\n');
-        while ~right_pass
+        while true
           pswd = input('Enter Password: ', 's');
 
           % check password
-          if pswd == decrypt(pswd, text(1, 4:((length(pswd)*8)+ 3)))
-            right_pass = true;
+          if (length(pswd) * 8 ) >= length(content) 
+            fprintf(2, '\nWRONG PASSWORD\n');
+          elseif pswd == decrypt(pswd, content(1, 1:(length(pswd)*8)))
             break;
+          else
+            fprintf(2, '\nWRONG PASSWORD\n');
           end
 
         end
 
+        message = decrypt(pswd, content(1, (length(pswd)*8 + 1):end));
+
 
       % normal text; store it as well
       case '010'
-        %TODO add code 
+        %TODO add code
 
       % encrypted text; store it as well
       case '011'
