@@ -9,7 +9,13 @@ function cypher = encrypt(message, password)
   cypher = zeros(1, msg_len);       % to predefine cypher's length
 
   for counter = 1:length(message)
-    cypher(counter) = (msg_ascii(counter)+ (pass_ascii(rem(counter, pass_len)+1)));
+      pass_counter = rem(counter, pass_len);
+
+      if pass_counter == 0
+          pass_counter = pass_len;
+      end
+
+    cypher(counter) = msg_ascii(counter) + (pass_ascii(pass_counter));
   end
 
 end

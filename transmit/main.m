@@ -32,9 +32,9 @@ while true
     % cmd: encrypt message
     if iscmd('encrypt', entered_text)
       [pass, message] = text_filter('encrypt', entered_text);
-      msg_hex = [encrypt(pass, pass), encrypt(message, pass)];
+      cypher_hex = [encrypt(pass, pass), encrypt(message, pass)];
 
-      msg_bin = ascii_convert(msg_hex, 'encrypted');
+      msg_bin = ascii_convert(cypher_hex);
       is_msg = true; is_encrypted = true; header = '001';
     end
 
@@ -120,7 +120,7 @@ while true
 
   % entered text is just a message
   else
-    msg_bin = ascii_convert(entered_text, 'plain');
+    msg_bin = ascii_convert(entered_text);
     is_msg = true;
   end
   
@@ -129,6 +129,7 @@ while true
   if is_msg
     full_msg = [preamble, extra, header, msg_bin, postamble];
     % code for passing msg_bin to the machine
+    disp(full_msg);
   end
 
 end
