@@ -86,6 +86,9 @@ while true
     % cmd: change username
     elseif iscmd('name', entered_text)
       username = entered_text(7:end);
+      msg_bin = ascii_convert(username);
+      header = '0010';
+      is_msg = true;
 
     % cmd: display help menu
     elseif iscmd('help', entered_text)
