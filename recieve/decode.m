@@ -1,5 +1,7 @@
 function username = decode(bin_msg, username)
-  
+  c = clock;
+  time = [num2str(c(4)), ':' num2str(c(5)), ':', num2str(c(4))];
+
   % change name
   if isequal(bin_msg(1, 1:4), '0010')
     username = char_convert(bin_msg(1, 5:end));
@@ -19,7 +21,7 @@ function username = decode(bin_msg, username)
     
     switch header
       % normal text
-      case '000'
+      case '000'    
         message = char_convert(content);
 
       % encrypted text
@@ -60,7 +62,7 @@ function username = decode(bin_msg, username)
         %TODO add code
 
     end
-    fprintf(2, '%s >> ', username);
+    fprintf(2, '[%s] %s >> ', time, username);
     disp(message);
   end
 end
