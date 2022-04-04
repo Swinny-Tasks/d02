@@ -17,7 +17,6 @@ while true
   
   is_msg = false;       % would be true only if entered text should be sent
   is_encrypted = false; % would be true if user encrypts their message
-  header = '000';       % would change depending on the type of message
   extra = '';           % could contain other extra information
 
 
@@ -123,6 +122,7 @@ while true
 
   % entered text is just a message
   else
+    header = '000';
     msg_bin = ascii_convert(entered_text);
     is_msg = true;
   end
