@@ -93,16 +93,20 @@ while true
     elseif iscmd('help', entered_text)
       fprintf(2, 'command\t\t\t\tfunction\n');
       fprintf('!help\t\t\t\tget list of all commands\n');
-      fprintf('![pass]message\t\tencrypt message with password\n');
-      fprintf('!{file}message\t\tsave message\\cmds in a local file\n');
-      fprintf('!{file}*message\t\tsave message\\cmds in a host file\n');
-      fprintf('!(file)\t\t\t\tsend content of a local file\n');
-      fprintf('!(file)*\t\t\tdisplay content of a host file\n');
-      fprintf('!!(file)\t\t\trun cmds from a local file\n');
-      fprintf('!!(file)*\t\t\trun cmds from a host file\n');
       fprintf('!name\t\t\t\tchange your display name\n');
       fprintf('!clc\t\t\t\tclear your console\n');
-      fprintf('!exit\t\t\t\tleave the program\n')
+      fprintf('!exit\t\t\t\tleave the program\n');
+      fprintf('\n');
+      fprintf('![pass]msg\t\t\tsend encrypted msgs\n');
+      fprintf('!{file}msg\t\t\tsave msg\\cmds in local memory\n');
+      fprintf('![pass]{file}msg\tsave encrypted msg\\cmds in a local file\n');
+      fprintf('!(file)\t\t\t\tsend content of a local file\n');
+      fprintf('!!(file)\t\t\trun cmds from a local file\n');
+      fprintf('\n');
+      fprintf('!*{file}msg\t\t\tsave msg\\cmds in host''s memory\n');
+      fprintf('!*[pass]{file}msg\tsave encrypted msg\\cmds in the host''s memory\n');
+      fprintf('!*(file)\t\t\tdisplay content of a file in the host''s memory\n');
+      fprintf('!!*(file)\t\t\trun cmds from saved file in the host''s memory\n');
 
     % cmd: clear console
     elseif iscmd('clc', entered_text)
