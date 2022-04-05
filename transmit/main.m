@@ -99,7 +99,7 @@ while true
       fprintf('!(file)\t\t\t\tsend content of a local file\n');
       fprintf('!(file)*\t\t\tdisplay content of a host file\n');
       fprintf('!!(file)\t\t\trun cmds from a local file\n');
-      fprintf('!!(file)*\t\t\teun cmds from a host file\n');
+      fprintf('!!(file)*\t\t\trun cmds from a host file\n');
       fprintf('!name\t\t\t\tchange your display name\n');
       fprintf('!clc\t\t\t\tclear your console\n');
       fprintf('!exit\t\t\t\tleave the program\n')
