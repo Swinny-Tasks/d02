@@ -45,6 +45,9 @@ while true
       else
           header = '010';
       end
+      [file_name, message] = text_filter('save', entered_text);
+      %TODO convert file name to bin + get file name size + check file name size
+      msg_bin = ascii_convert(message);
       %TODO add save code
 
     % cmd: save msg/cypher in local memory
