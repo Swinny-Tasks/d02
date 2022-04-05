@@ -38,7 +38,7 @@ while true
     end
 
     % cmd: save msg/cypher in host memory
-    if (iscmd('save', entered_text) && entered_text(1, 2) == '*')
+    if iscmd('saveH', entered_text)
       is_msg = true;
       if is_encrypted
           header = '011';
@@ -48,7 +48,8 @@ while true
       %TODO add save code
 
     % cmd: save msg/cypher in local memory
-    elseif iscmd('save', entered_text)
+    elseif iscmd('saveL', entered_text)
+      is_msg = false;
       %TODO add code
 
     % cmd: load plain file from local memory
