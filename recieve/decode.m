@@ -29,17 +29,22 @@ function username = decode(bin_msg, username)
        pswd = get_password(content);
        message = decrypt(pswd, content(1, (length(pswd)*8 + 1):end));
 
-
       % normal text; store it as well
       case '010'
         file_len = bin2dec(content(1:8));
         file_name = char_convert(content(9:(file_len*8 + 8)));
         message = char_convert(content((9 + file_len*8):end));
         save_sit(username, time, file_name, message);
+        fprintf(2, 'saving the message locally in: %s.sit\n', file_name);
 
       % encrypted text; store it as well
       case '011'
-        %TODO add code 
+        file_len = bin2dec(content(1:8));
+        file_name = char_convert(content(9:(file_len*8 + 8)));
+        pswd = get_password(content((9 + file_len*8):end));
+        message = decrypt(pswd, content(1, (9 + 8*(file_len + length(pswd))):end));
+        save_sit(username, time, file_name, message);
+        fprintf(2, 'saving the message locally in: %s.sit\n', file_name);
 
       % load normal text
       case '100'

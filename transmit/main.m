@@ -14,10 +14,9 @@ postamble = '';
 while true
   fprintf(2, '\n[%s] $', username);
   entered_text = input(' ', 's');
-  
   is_msg = false;       % would be true only if entered text should be sent
   is_encrypted = false; % would be true if user encrypts their message
-  extra = '';           % could contain other extra information
+  file_bin = ''; pswd_bin = ''; % could contain other extra information
 
 
   % if empty input
@@ -32,7 +31,7 @@ while true
     if iscmd('encrypt', entered_text)
       [pass, message] = text_filter('encrypt', entered_text);
       msg_bin = ascii_convert(encrypt(message, pass));
-      extra = ascii_convert(encrypt(pass, pass));
+      pswd_bin = ascii_convert(encrypt(pass, pass));
 
       is_msg = true; is_encrypted = true; header = '001';
     end
@@ -57,7 +56,7 @@ while true
               file_len_bin = ['0', file_len_bin];
           end
       end
-      extra = [file_len_bin, ascii_convert(file_name), extra];
+      file_bin = [file_len_bin, ascii_convert(file_name)];
       msg_bin = ascii_convert(message);
 
     % cmd: save msg/cypher in local memory
@@ -148,7 +147,7 @@ while true
 
   % do not send message if user enters local cmd
   if is_msg
-    full_msg = [preamble, header, extra, msg_bin, postamble];
+    full_msg = [preamble, header, file_bin, pswd_bin, msg_bin, postamble];
     % code for passing msg_bin to the machine
     disp(full_msg);
   end
