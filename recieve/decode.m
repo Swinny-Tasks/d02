@@ -46,8 +46,10 @@ function username = decode(bin_msg, username)
 
       % normal text; store it as well
       case '010'
-        message = char_convert(content);
-        %TODO add code to save message
+        file_len = bin2dec(content(1:8));
+        file_name = char_convert(content(9:(file_len*8 + 8)));
+        message = char_convert(content((9 + file_len*8):end));
+        save_sit(username, time, file_name, message);
 
       % encrypted text; store it as well
       case '011'
