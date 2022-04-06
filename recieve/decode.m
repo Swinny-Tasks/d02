@@ -26,22 +26,8 @@ function username = decode(bin_msg, username)
 
       % encrypted text
       case '001'
-        fprintf(2, 'This is an encrypted message!\n');
-        while true
-          pswd = input('Enter Password: ', 's');
-
-          % check password
-          if (length(pswd) * 8 ) >= length(content) 
-            fprintf(2, '\nWRONG PASSWORD\n');
-          elseif pswd == decrypt(pswd, content(1, 1:(length(pswd)*8)))
-            break;
-          else
-            fprintf(2, '\nWRONG PASSWORD\n');
-          end
-
-        end
-
-        message = decrypt(pswd, content(1, (length(pswd)*8 + 1):end));
+       pswd = get_password(content);
+       message = decrypt(pswd, content(1, (length(pswd)*8 + 1):end));
 
 
       % normal text; store it as well
