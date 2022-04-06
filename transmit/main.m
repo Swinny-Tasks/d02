@@ -31,9 +31,9 @@ while true
     % cmd: encrypt message
     if iscmd('encrypt', entered_text)
       [pass, message] = text_filter('encrypt', entered_text);
-      cypher_hex = [encrypt(pass, pass), encrypt(message, pass)];
+      msg_bin = ascii_convert(encrypt(message, pass));
+      extra = ascii_convert(encrypt(pass, pass));
 
-      msg_bin = ascii_convert(cypher_hex);
       is_msg = true; is_encrypted = true; header = '001';
     end
 
@@ -57,7 +57,7 @@ while true
               file_len_bin = ['0', file_len_bin];
           end
       end
-      extra = [file_len_bin, ascii_convert(file_name)];
+      extra = [file_len_bin, ascii_convert(file_name), extra];
       msg_bin = ascii_convert(message);
 
     % cmd: save msg/cypher in local memory
