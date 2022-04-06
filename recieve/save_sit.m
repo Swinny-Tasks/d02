@@ -5,7 +5,7 @@ function save_sit(user, time, file_name, content)
   date = [num2str(c(3)), '/', num2str(c(2)), '/', num2str(c(1))];
 
   new_sit = fopen(file_name, 'w');
-  fprintf(new_sit, '{%s} on [%s] at [%s]\n%s', user, date, time, content);
+  fprintf(new_sit, '{%s} on [%s] at [%s]\n%s\n', user, date, time, content);
   fclose(new_sit);
   
 end
