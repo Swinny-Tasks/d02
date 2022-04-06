@@ -45,10 +45,20 @@ while true
       else
           header = '010';
       end
+
       [file_name, message] = text_filter('save', entered_text);
-      %TODO convert file name to bin + get file name size + check file name size
+      
+      if length(file_name) > 255
+          fprintf(2, "FILE SILZE SHOULD BE SMALLER THAN 255 CHARACTERS")
+          is_msg = false;
+      else
+          file_len_bin = dec2bin(length(file_name));
+          while length(file_len_bin) ~= 8
+              file_len_bin = ['0', file_len_bin];
+          end
+      end
+      extra = [file_len_bin, ascii_convert(file_name)];
       msg_bin = ascii_convert(message);
-      %TODO add save code
 
     % cmd: save msg/cypher in local memory
     elseif iscmd('saveL', entered_text)
@@ -138,7 +148,7 @@ while true
 
   % do not send message if user enters local cmd
   if is_msg
-    full_msg = [preamble, extra, header, msg_bin, postamble];
+    full_msg = [preamble, header, extra, msg_bin, postamble];
     % code for passing msg_bin to the machine
     disp(full_msg);
   end
