@@ -8,7 +8,7 @@ disp(' \__,_|\___|_____|');
 % variable declaration
 username = 'user';
 preamble = '';
-postamble = '';
+postamble = '0';
 
 % text interface
 while true
@@ -148,8 +148,7 @@ while true
   % do not send message if user enters local cmd
   if is_msg
     full_msg = [preamble, header, file_bin, pswd_bin, msg_bin, postamble];
-    % code for passing msg_bin to the machine
-    disp(full_msg);
+    send_signal(full_msg);
   end
 
 end
