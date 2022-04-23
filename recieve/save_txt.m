@@ -1,5 +1,5 @@
 % save passed content in a file 
-function save_sit(user, time, file_name, content)
+function save_txt(user, time, file_name, content)
   file_name = [file_name, '.sit'];
   c = clock;
   date = [num2str(c(3)), '/', num2str(c(2)), '/', num2str(c(1))];
