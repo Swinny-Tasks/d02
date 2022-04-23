@@ -2,8 +2,8 @@ function sit_compile(code)
   LED_seq = ["b1", "r1", "b2", "r2", "r3", "b3", "r4", "b4"];
   
   % connecting to the hardware
-  m = daq.createSession('ni');
-  m.addDigitalChannel('myDAQ1','Port0/Line0:7','OutputOnly');
+  dev = daq.createSession('ni');
+  dev.addDigitalChannel('myDAQ1','Port0/Line0:7','OutputOnly');
   
   % getting all one-time actions together
   code = split(code, ";");
@@ -34,19 +34,19 @@ function sit_compile(code)
         on_LEDs(1, LED_index) = 1;
       end
     end
-    disp(on_LEDs)
 
     %turning all reqested lights on
-    m.outputSingleScan(on_LEDs);
-    m.release();
+    dev.outputSingleScan(on_LEDs);
+    dev.release();
 
     % turn off specific LED after specified time delay
     for m = 1:length(processes)
       pause(str2double(processes(m, 2)));
       turn_off_index = LED_seq == lower(processes(m, 1));
       on_LEDs(1, turn_off_index) = 0;
-      disp(on_LEDs)
-      m.outputSingleScan(on_LEDs);
+
+      dev.outputSingleScan(on_LEDs);
+      dev.release();
     end
   end
 end
