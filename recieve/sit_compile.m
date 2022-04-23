@@ -21,7 +21,7 @@ function sit_compile(code)
 
     for k = (length(content)/5):-1:2
       % change 'time on' with 'time difference'
-      diff = str2num(processes(k, 2)) - str2num(processes(k-1, 2));
+      diff = str2double(processes(k, 2)) - str2double(processes(k-1, 2));
       processes(k, 2) = string(diff);
 
       % generating 'to turn on' list
@@ -30,10 +30,18 @@ function sit_compile(code)
         on_LEDs(1, LED_index) = 1;
       end
     end
-    
-    % turn all off
-    m.outputSingleScan([0 0 0 0 0 0 0 0]);
+    disp(on_LEDs)
+
+    %turning all reqested lights on
+    m.outputSingleScan(on_LEDs);
     m.release();
 
+    % turn off specific LED after specified time delay
+    for l = 1:length(processes)
+      pause(str2double(processes(l, 2)));
+      turn_off_index = LED_seq == lower(processes(l, 1));
+      on_LEDs(1, turn_off_index) = 0;
+      m.outputSingleScan(on_LEDs);
+    end
   end
 end
