@@ -12,6 +12,13 @@ function sit_compile(code)
     % sorting LEDS with assending time order
     processes = sortrows(processes, 2); 
 
+    % change 'time on' with 'time difference'
+    for k = (length(content)/5):-1:2
+      diff = str2num(processes(k, 2)) - str2num(processes(k-1, 2));
+      processes(k, 2) = string(diff);
+    end
+
+    
     % turn all off
   end
 end
