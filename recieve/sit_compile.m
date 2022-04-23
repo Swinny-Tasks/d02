@@ -26,13 +26,15 @@ function sit_compile(code)
     processes = sortrows(processes, 2); 
 
     % change 'time on' with 'time difference'
-    for k = length(processes):-1:2
-      diff = str2double(processes(k, 2)) - str2double(processes(k-1, 2));
-      processes(k, 2) = string(diff);
+    if length(processes(:, 1)) > 1
+      for k = length(processes(:, 1)):-1:2
+        diff = str2double(processes(k, 2)) - str2double(processes(k-1, 2));
+        processes(k, 2) = string(diff);
+      end
     end
 
     % generating 'to turn on' list
-    for l = 1:length(processes)
+    for l = 1:length(processes(:, 1))
       LED_index = find(LED_seq == lower(processes(l, 1)));
       if ~isempty(LED_index)
         on_LEDs(1, LED_index) = 1;
@@ -44,7 +46,7 @@ function sit_compile(code)
     dev.release();
 
     % turn off specific LED after specified time delay
-    for m = 1:length(processes)
+    for m = 1:length(processes(:, 1))
       pause(str2double(processes(m, 2)));
       turn_off_index = LED_seq == lower(processes(m, 1));
       on_LEDs(1, turn_off_index) = 0;
