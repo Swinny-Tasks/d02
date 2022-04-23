@@ -20,6 +20,7 @@ function sit_compile(code)
       processes(j, 1) = string(content((index-2):(index-1)));  % LED Name
       processes(j, 2) = string(content((index+1):(after_time(j)-1))); % on time
     end
+    clear before_time after_time content
 
     % sorting LEDS with assending time order
     processes = sortrows(processes, 2); 
