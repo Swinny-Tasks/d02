@@ -6,7 +6,7 @@ function sit_compile(code)
   dev.addDigitalChannel('myDAQ1','Port0/Line0:7','OutputOnly');
   
   % getting all one-time actions together
-  code = split(code, ";");
+  code = split(erase(code, ' '), ";");
   for i = 1:length(code)
     content = char(code(i));
     on_LEDs = [0 0 0 0 0 0 0 0];
@@ -50,3 +50,4 @@ function sit_compile(code)
     end
   end
 end
+
