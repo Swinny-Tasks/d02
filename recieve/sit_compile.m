@@ -9,7 +9,8 @@ function sit_compile(code)
       processes(j, 1) = string(content((5*j-4):(5*j-3)));  % LED Name
       processes(j, 2) = string(content(5*j-1));            % on time
     end
-    sortrows(processes, 2); % sorting LEDS with assending time order
+    % sorting LEDS with assending time order
+    processes = sortrows(processes, 2); 
 
     % turn all off
   end
