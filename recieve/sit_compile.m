@@ -1,5 +1,5 @@
 function sit_compile(code)
-  LED_seq = ["r1", "b1", "r2", "b2", "r3", "b3", "r4", "b4"];
+  LED_seq = ["b1", "r1", "b2", "r2", "r3", "b3", "r4", "b4"];
   
   % connecting to the hardware
   m = daq.createSession('ni');
@@ -11,21 +11,25 @@ function sit_compile(code)
     content = char(code(i));
     on_LEDs = [0 0 0 0 0 0 0 0];
     
+    % generating list of LEDs dealt with in this process
     processes = string(zeros(length(content)/5, 2));
     for j = 1:(length(content)/5)
       processes(j, 1) = string(content((5*j-4):(5*j-3)));  % LED Name
       processes(j, 2) = string(content(5*j-1));            % on time
     end
+
     % sorting LEDS with assending time order
     processes = sortrows(processes, 2); 
 
+    % change 'time on' with 'time difference'
     for k = (length(content)/5):-1:2
-      % change 'time on' with 'time difference'
       diff = str2double(processes(k, 2)) - str2double(processes(k-1, 2));
       processes(k, 2) = string(diff);
+    end
 
-      % generating 'to turn on' list
-      LED_index = find(LED_seq == lower(processes(k, 1)));
+    % generating 'to turn on' list
+    for l = 1:length(processes)
+      LED_index = find(LED_seq == lower(processes(l, 1)));
       if ~isempty(LED_index)
         on_LEDs(1, LED_index) = 1;
       end
@@ -37,10 +41,11 @@ function sit_compile(code)
     m.release();
 
     % turn off specific LED after specified time delay
-    for l = 1:length(processes)
-      pause(str2double(processes(l, 2)));
-      turn_off_index = LED_seq == lower(processes(l, 1));
+    for m = 1:length(processes)
+      pause(str2double(processes(m, 2)));
+      turn_off_index = LED_seq == lower(processes(m, 1));
       on_LEDs(1, turn_off_index) = 0;
+      disp(on_LEDs)
       m.outputSingleScan(on_LEDs);
     end
   end
