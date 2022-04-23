@@ -1,6 +1,10 @@
 function sit_compile(code)
   LED_seq = ["r1", "b1", "r2", "b2", "r3", "b3", "r4", "b4"];
   
+  % connecting to the hardware
+  m = daq.createSession('ni');
+  m.addDigitalChannel('myDAQ1','Port0/Line0:7','OutputOnly');
+  
   % getting all one-time actions together
   code = split(code, ";");
   for i = 1:length(code)
@@ -26,8 +30,10 @@ function sit_compile(code)
         on_LEDs(1, LED_index) = 1;
       end
     end
-
     
     % turn all off
+    m.outputSingleScan([0 0 0 0 0 0 0 0]);
+    m.release();
+
   end
 end
