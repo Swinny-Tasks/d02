@@ -9,7 +9,7 @@ function sit_compile(code)
   code = split(erase(code, ' '), ";");
   for i = 1:length(code)
     content = char(code(i));
-    on_LEDs = [0 0 0 0 0 0 0 0];
+    on_LEDs = zeros(1, 8);
     
     % generating list of LEDs dealt with in this process
     before_time = find(content == '(');
