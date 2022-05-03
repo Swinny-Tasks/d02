@@ -7,8 +7,8 @@ disp(' \__,_|\___|_____|');
 
 % variable declaration
 username = 'user';
-preamble = '';
-postamble = '0';
+preamble = '11101110111';
+postamble = '00011111110';
 
 % text interface
 while true
