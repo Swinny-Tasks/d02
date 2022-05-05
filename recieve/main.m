@@ -5,18 +5,20 @@ disp('  __| |/ _ |___ \');
 disp(' / _` | | | |__) |');
 disp('| (_| | |_| / __/');
 disp(' \__,_|\___|_____|');
+disp('  ')
 
 username = 'user';
 
-s = daq.createSession('ni');
-s.addAnalogInputChannel('myDAQ1',0, 'Voltage');
-s.DurationInSeconds = 10;
+s = daq('ni');
+s.addinput('myDAQ1',0, 'Voltage');
 message_bin = '';
+s.Rate = 2000;
 
 % program would continue working- waiting for text; without any limit
 while true
-  sensor_data = s.startForeground; % collect sensor data
-  raw_bin = erase(num2str([sensor_data < mean(sensor_data)]'), ' ');
+  sensor_data = read(s, seconds(1), "OutputFormat","Matrix"); % collect sensor data
+  
+  raw_bin = erase(num2str([sensor_data > 2]'), ' ');
   
   if contains(raw_bin, "11101110111")   % look for preamble
     if contains(raw_bin, "00011111110") % look for postamble
@@ -29,17 +31,8 @@ while true
     
     end
   else
-    if ~isempty(message_bin) && contains(bin, "00011111110")
-      % if last message only recoded starting of whole message
-      message_bin = [message_bin, bin];
-      message = slice_msg(message_bin);
-      message_bin = '';
-
-    else
-      % scan only recorded garbage
-      continue;
-    end
+    continue;
   end
-
   username = decode(message, username);
+  disp(' ')
 end
