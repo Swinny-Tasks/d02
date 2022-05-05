@@ -21,6 +21,7 @@ while true
   if contains(raw_bin, "11101110111")   % look for preamble
     if contains(raw_bin, "00011111110") % look for postamble
       % complete messasge recorded
+      message = slice_msg(raw_bin);
 
     else
       % means the scan only recoded starting of the whole message
@@ -30,15 +31,15 @@ while true
   else
     if ~isempty(message_bin) && contains(bin, "00011111110")
       % if last message only recoded starting of whole message
+      message_bin = [message_bin, bin];
+      message = slice_msg(message_bin);
+      message_bin = '';
 
     else
       % scan only recorded garbage
       continue;
     end
   end
-  
 
-  % look for preambed
-  message = ''; % extract from raw binary; scrape out preamble and post
   username = decode(message, username);
 end
