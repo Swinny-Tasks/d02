@@ -54,7 +54,7 @@ while true
       end
 
       [file_name, message] = text_filter('save', entered_text);
-      
+
       if length(file_name) > 255
           fprintf(2, "FILE NAME SHOULD BE SMALLER THAN 255 CHARACTERS")
           is_msg = false;
@@ -84,7 +84,11 @@ while true
     % cmd: load plain file from local memory
     elseif iscmd('loadLP', entered_text)
       header = '000';
-      %TODO add code
+      [file_name, buffer] = text_filter('load', entered_text);
+      clear buffer; % doesn't matter what user types here
+      
+      message = importdata(file_name);
+      message = string(message(2));
 
     % cmd: load encrypted file from local memory
     elseif iscmd('loadLE', entered_text)
