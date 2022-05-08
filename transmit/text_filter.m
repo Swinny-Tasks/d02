@@ -7,6 +7,8 @@ function [extra_info, message] = text_filter(expected, text)
     borders = ['{', '}'];
   elseif isequal(expected, 'load')
     borders = ['(', ')'];
+  elseif isequal(expected, 'run')
+    borders = ['<', '>'];
   end
 
   starting = find(text == borders(1, 1));

@@ -86,7 +86,7 @@ while true
     % cmd: run SIT from Host memory
     elseif iscmd('runH', entered_text)
       header = '100';
-      [sit_name, buffer] = text_filter('load', entered_text);
+      [sit_name, buffer] = text_filter('run', entered_text);
       clear buffer; % dont need this information
       msg_bin = ascii_convert(sit_name);
 
@@ -94,7 +94,7 @@ while true
     % cmd: run SIT from Local memory
     elseif iscmd('runL', entered_text)
       header = '101';
-      [sit_name, buffer] = text_filter('load', entered_text);
+      [sit_name, buffer] = text_filter('run', entered_text);
       clear buffer; % doesn't matter what user types here
       
       sit = importdata(sit_name);
