@@ -14,74 +14,68 @@ postamble = '00011111110';
 while true
   fprintf(2, '\n[%s] $', username);
   entered_text = input(' ', 's');
-  is_msg = false;       % would be true only if entered text should be sent
-  is_encrypted = false; % would be true if user encrypts their message
-  file_bin = ''; pswd_bin = ''; % could contain other extra information
+  extra = ''; % could contain other extra info such as password or filename
+  header = ''; % would be filled depending on different conditions
   timenow = datetime('now');
 
   % if empty input
   if size(entered_text) == 0
     continue;
 
-
   % check if possible command
   elseif (entered_text(1) == '!' && length(entered_text) > 1)
 
     % cmd: encrypt message
     if iscmd('encrypt', entered_text)
+      header = '001';
       [pass, message] = text_filter('encrypt', entered_text);
       
-      % check if message is also supposed to be saved
-      if (message(1) == '{')
-        [bufer, message] = text_filter('save', message);
-      end
-      clear buffer; % not required right now
-
       msg_bin = ascii_convert(encrypt(message, pass));
-      pswd_bin = ascii_convert(encrypt(pass, pass));
+      extra = ascii_convert(encrypt(pass, pass));
+      
       clear message pass; % clearing no longer needed vars
-
-      is_msg = true; is_encrypted = true; header = '001';
     end
 
-    % cmd: save msg/cypher in host memory
+
+    % cmd: save message/SIT in Host memory
     if iscmd('saveH', entered_text)
-      is_msg = true;
-      if is_encrypted
-          header = '011';
-      else
-          header = '010';
-      end
-
+      header = '010';
       [file_name, message] = text_filter('save', entered_text);
-
+      
       if length(file_name) > 255
           fprintf(2, "FILE NAME SHOULD BE SMALLER THAN 255 CHARACTERS")
-          is_msg = false;
+          continue;
       else
           file_len_bin = dec2bin(length(file_name));
           while length(file_len_bin) ~= 8
               file_len_bin = ['0', file_len_bin];
           end
       end
-      file_bin = [file_len_bin, ascii_convert(file_name)];
+      extra = [file_len_bin, ascii_convert(file_name)];
       msg_bin = ascii_convert(message);
       clear message file_len_bin;
 
-    % cmd: save msg/cypher in local memory
+
+    % cmd: save message/SIT in Local memory
     elseif iscmd('saveL', entered_text)
-      is_msg = false;
       [file_name, message] = text_filter('save', entered_text);
       
       if length(file_name) > 255
           fprintf(2, "FILE NAME SHOULD BE SMALLER THAN 255 CHARACTERS")
           continue;
       end
-      save_content(username, timenow, file_name, message, '.txt');
+      save_content(username, timenow, file_name, message);
       fprintf(2, 'message saved!');
       clear message file_len_bin;
 
-    % cmd: load plain file from local memory
+
+    % cmd: load Plain file from Host memory
+    elseif iscmd('loadHP', entered_text)
+      header = '011';
+      %TODO add code
+
+
+    % cmd: load Plain file from Local memory
     elseif iscmd('loadLP', entered_text)
       header = '000';
       [file_name, buffer] = text_filter('load', entered_text);
@@ -90,38 +84,24 @@ while true
       message = importdata(file_name);
       message = string(message(2));
 
-    % cmd: load encrypted file from local memory
-    elseif iscmd('loadLE', entered_text)
-      header = '001';
-      %TODO add code
 
-    % cmd: load plain file from local memory
-    elseif iscmd('loadHP', entered_text)
+    % cmd: run SIT from Host memory
+    elseif iscmd('runH', entered_text)
       header = '100';
       %TODO add code
 
-    % cmd: load encrypted file from local memory
-    elseif iscmd('loadHE', entered_text)
+      
+    % cmd: run SIT from Local memory
+    elseif iscmd('runL', entered_text)
       header = '101';
       %TODO add code
 
-    % cmd: run localy stored command
-    elseif iscmd('runL', entered_text)
-      header = '110';
-      %TODO add code
-
-    % cmd: run remotely stored command
-    elseif iscmd('runH', entered_text)
-      header = '111';
-      is_msg = true;
-      %TODO add code
 
     % cmd: change username
     elseif iscmd('name', entered_text)
+      header = '0010';
       username = entered_text(7:end);
       msg_bin = ascii_convert(username);
-      header = '0010';
-      is_msg = true;
 
     % cmd: display help menu
     elseif iscmd('help', entered_text)
@@ -130,15 +110,22 @@ while true
       fprintf('!name\t\t\t\tchange your display name\n');
       fprintf('!clc\t\t\t\tclear your console\n');
       fprintf('!exit\t\t\t\tleave the program\n');
-      fprintf('![pass]msg\t\t\tsend encrypted msgs\n');
+      
+      fprintf(2, '\nEncryption\n');
+      fprintf('![pass]msg\t\t\tencrypt message before sending\n');
+
       fprintf(2, '\nLocal Actions\n');
-      fprintf('!{file}msg\t\t\tsave msg/cmds in local memory\n');
-      fprintf('![pass]{file}msg\tsave encrypted msg/cmds in a local file\n');
-      fprintf('!(file)\t\t\t\tsend locally saved sit\n');
+      fprintf('!{file.txt}msg\t\t\tsave msg in local memory\n');
+      fprintf('!{file.sit}msg\t\t\tsave SIT in local memory\n');
+      fprintf('!(file)\t\t\t\tsend locally saved file\n');
+      fprintf('!<file>\t\t\t\trun locally saved sit\n');
+
       fprintf(2, '\nHost Operations\n');
-      fprintf('!*{file}msg\t\t\tsave msg/cmds in host''s memory\n');
-      fprintf('!*[pass]{file}msg\tsave encrypted msg/cmds in the host''s memory\n');
-      fprintf('!*(file)\t\t\trun/display sit file from the host''s memory\n');
+      fprintf('!*{file.txt}msg\t\t\tsave msg in host''s memory\n');
+      fprintf('!*{file.sit}msg\t\t\tsave SIT in host''s memory\n');
+      fprintf('!*(file)\t\t\tview file saved on host''s memory\n');
+      fprintf('!*<file>\t\t\trun sit saved on host''s memory\n');
+
 
     % cmd: clear console
     elseif iscmd('clc', entered_text)
@@ -149,7 +136,7 @@ while true
       fprintf('\nThank you for using d02\n\n\n');
       break;
 
-    elseif ~is_encrypted
+    else
         fprintf(2, '\n\t\t ! INVALID COMMAND !\n');
         disp('Type !help to get list of all commands.')
     end
@@ -159,13 +146,12 @@ while true
   else
     header = '000';
     msg_bin = ascii_convert(entered_text);
-    is_msg = true;
   end
   
 
   % do not send message if user enters local cmd
-  if is_msg
-    full_msg = [preamble, header, file_bin, pswd_bin, msg_bin, postamble];
+  if ~isempty(header)
+    full_msg = [preamble, header, extra, msg_bin, postamble];
     send_signal(full_msg);
   end
 
