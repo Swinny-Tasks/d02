@@ -68,7 +68,9 @@ while true
     % cmd: load plain file from Host memory
     elseif iscmd('loadH', entered_text)
       header = '011';
-      %TODO add code
+      [filename, buffer] = text_filter('load', entered_text);
+      clear buffer; % dont need this information
+      msg_bin = ascii_convert(filename);
 
 
     % cmd: Load plain file from Local memory
@@ -78,19 +80,32 @@ while true
       clear buffer; % doesn't matter what user types here
       
       message = importdata(file_name);
-      message = string(message(2));
+      msg_bin = ascii_convert(string(message(2)));
 
 
     % cmd: run SIT from Host memory
     elseif iscmd('runH', entered_text)
       header = '100';
-      %TODO add code
+      [sit_name, buffer] = text_filter('load', entered_text);
+      clear buffer; % dont need this information
+      msg_bin = ascii_convert(sit_name);
 
       
     % cmd: run SIT from Local memory
     elseif iscmd('runL', entered_text)
       header = '101';
-      %TODO add code
+      [sit_name, buffer] = text_filter('load', entered_text);
+      clear buffer; % doesn't matter what user types here
+      
+      sit = importdata(sit_name);
+      msg_bin = ascii_convert(string(sit(2)));
+
+
+    % cmd: user entered SIT
+    elseif iscmd('run', entered_text)
+      header = '101';
+      sit_command = erase(entered_text, ' ');
+      msg_bin = ascii_convert(sit_command(5:end));
 
 
     % cmd: change username
