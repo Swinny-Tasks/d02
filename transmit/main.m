@@ -17,7 +17,7 @@ while true
   is_msg = false;       % would be true only if entered text should be sent
   is_encrypted = false; % would be true if user encrypts their message
   file_bin = ''; pswd_bin = ''; % could contain other extra information
-
+  timenow = datetime('now');
 
   % if empty input
   if size(entered_text) == 0
@@ -56,7 +56,7 @@ while true
       [file_name, message] = text_filter('save', entered_text);
       
       if length(file_name) > 255
-          fprintf(2, "FILE SILZE SHOULD BE SMALLER THAN 255 CHARACTERS")
+          fprintf(2, "FILE NAME SHOULD BE SMALLER THAN 255 CHARACTERS")
           is_msg = false;
       else
           file_len_bin = dec2bin(length(file_name));
@@ -71,7 +71,15 @@ while true
     % cmd: save msg/cypher in local memory
     elseif iscmd('saveL', entered_text)
       is_msg = false;
-      %TODO add code
+      [file_name, message] = text_filter('save', entered_text);
+      
+      if length(file_name) > 255
+          fprintf(2, "FILE NAME SHOULD BE SMALLER THAN 255 CHARACTERS")
+          continue;
+      end
+      save_content(username, timenow, file_name, message, '.txt');
+      fprintf(2, 'message saved!');
+      clear message file_len_bin;
 
     % cmd: load plain file from local memory
     elseif iscmd('loadLP', entered_text)
