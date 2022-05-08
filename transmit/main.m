@@ -165,8 +165,7 @@ while true
   % do not send message if user enters local cmd
   if ~isempty(header)
     full_msg = [preamble, header, extra, msg_bin, postamble];
-    disp([header, extra, msg_bin]);
-    % send_signal(full_msg);
+    send_signal(full_msg);
   end
 
 end
