@@ -7,14 +7,6 @@ function username = decode(bin_msg, username)
     username = char_convert(bin_msg(1, 5:end));
     fprintf(2, 'now recieving messages from %s\n', username);
 
-  % is command
-  elseif  isequal('110', bin_msg(1, 1:3))
-    %TODO add code 
-
-  % load command
-  elseif  isequal('111', bin_msg(1, 1:3))
-    %TODO add code
-
   else
     header = bin_msg(1, 1:3);
     content = bin_msg(1, 4:end);
@@ -35,24 +27,33 @@ function username = decode(bin_msg, username)
         file_name = char_convert(content(9:(file_len*8 + 8)));
         message = char_convert(content((9 + file_len*8):end));
         save_txt(username, time, file_name, message);
-        fprintf(2, 'saving the message locally in: %s.sit\n', file_name);
+        fprintf(2, 'saving the message locally in: files/%s\n', file_name);
 
-      % encrypted text; store it as well
+      % load plain file from memory
       case '011'
-        file_len = bin2dec(content(1:8));
-        file_name = char_convert(content(9:(file_len*8 + 8)));
-        pswd = get_password(content((9 + file_len*8):end));
-        message = decrypt(pswd, content(1, (9 + 8*(file_len + length(pswd))):end));
-        save_txt(username, time, file_name, message);
-        fprintf(2, 'saving the message locally in: %s.sit\n', file_name);
+        filename = ['files/', content];
+        try
+          file = importdata(filename);
+          message = string(file(2));
+        catch
+          message = ["*cannot find file {", content, "} on the system.*"];
+        end
 
-      % load normal text
+      % run SIT from memory
       case '100'
-        %TODO add code
+        filename = ['files/', content];
+        try
+          file = importdata(filename);
+          message = ["LED ACTION: ", string(file(2))];
+          sit_compile(string(file(2)));
+        catch
+          message = ["*cannot find file {", content, "} on the system.*"];
+        end
 
-      % load encrypted text
+      % run SIT command
       case '101'
-        %TODO add code
+        message = ["LED ACTION: ", content];
+        sit_compile(content);
 
     end
     fprintf(2, '[%s] %s >> ', time, username);
