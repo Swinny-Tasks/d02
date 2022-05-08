@@ -39,6 +39,7 @@ while true
 
       msg_bin = ascii_convert(encrypt(message, pass));
       pswd_bin = ascii_convert(encrypt(pass, pass));
+      clear message pass; % clearing no longer needed vars
 
       is_msg = true; is_encrypted = true; header = '001';
     end
@@ -65,6 +66,7 @@ while true
       end
       file_bin = [file_len_bin, ascii_convert(file_name)];
       msg_bin = ascii_convert(message);
+      clear message file_len_bin;
 
     % cmd: save msg/cypher in local memory
     elseif iscmd('saveL', entered_text)
@@ -133,12 +135,11 @@ while true
     % cmd: exit the program
     elseif iscmd('exit', entered_text)
       fprintf('\nThank you for using d02\n\n\n');
-      break
+      break;
 
     elseif ~is_encrypted
         fprintf(2, '\n\t\t ! INVALID COMMAND !\n');
         disp('Type !help to get list of all commands.')
-
     end
 
 
@@ -152,9 +153,8 @@ while true
 
   % do not send message if user enters local cmd
   if is_msg
-    %full_msg = [preamble, header, file_bin, pswd_bin, msg_bin, postamble];
-    %send_signal(full_msg);
-    disp('testing')
+    full_msg = [preamble, header, file_bin, pswd_bin, msg_bin, postamble];
+    send_signal(full_msg);
   end
 
 end
