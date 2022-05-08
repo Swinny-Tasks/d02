@@ -21,7 +21,7 @@ while true
 
   % if empty input
   if size(entered_text) == 0
-    continue
+    continue;
 
 
   % check if possible command
@@ -30,6 +30,13 @@ while true
     % cmd: encrypt message
     if iscmd('encrypt', entered_text)
       [pass, message] = text_filter('encrypt', entered_text);
+      
+      % check if message is also supposed to be saved
+      if (message(1) == '{')
+        [bufer, message] = text_filter('save', message);
+      end
+      clear buffer; % not required right now
+
       msg_bin = ascii_convert(encrypt(message, pass));
       pswd_bin = ascii_convert(encrypt(pass, pass));
 
@@ -145,8 +152,9 @@ while true
 
   % do not send message if user enters local cmd
   if is_msg
-    full_msg = [preamble, header, file_bin, pswd_bin, msg_bin, postamble];
-    send_signal(full_msg);
+    %full_msg = [preamble, header, file_bin, pswd_bin, msg_bin, postamble];
+    %send_signal(full_msg);
+    disp('testing')
   end
 
 end
