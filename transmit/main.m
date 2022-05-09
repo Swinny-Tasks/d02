@@ -68,9 +68,9 @@ while true
     % cmd: load plain file from Host memory
     elseif iscmd('loadH', entered_text)
       header = '011';
-      [filename, buffer] = text_filter('load', entered_text);
+      [file_name, buffer] = text_filter('load', entered_text);
       clear buffer; % dont need this information
-      msg_bin = ascii_convert(filename);
+      msg_bin = ascii_convert(file_name);
 
 
     % cmd: Load plain file from Local memory
@@ -79,9 +79,14 @@ while true
       [file_name, buffer] = text_filter('load', entered_text);
       clear buffer; % doesn't matter what user types here
       
-      message = importdata(file_name);
-      msg_bin = ascii_convert(string(message(2)));
-
+      try
+        message = importdata(['files\', file_name]);
+        msg_bin = ascii_convert(char(message(2)));
+        clear file_name;
+      catch
+        header = '';
+        fprintf(2, 'INVALID FILE\n');
+      end
 
     % cmd: run SIT from Host memory
     elseif iscmd('runH', entered_text)
@@ -97,8 +102,15 @@ while true
       [sit_name, buffer] = text_filter('run', entered_text);
       clear buffer; % doesn't matter what user types here
       
-      sit = importdata(sit_name);
-      msg_bin = ascii_convert(string(sit(2)));
+      try
+        sit = importdata(['files\', sit_name]);
+        msg_bin = ascii_convert(char(sit(2)));
+      catch
+        header = '';
+        fprintf(2, 'Could not find file\n');
+        pwd
+        disp(sit_name)
+      end
 
 
     % cmd: user entered SIT
