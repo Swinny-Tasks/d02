@@ -126,6 +126,7 @@ while true
       fprintf(2, '\nAdvance\n');
       fprintf('![pass]msg\t\t\tencrypt message before sending\n');
       fprintf('!run sit_code\t\tenter sit code\n');
+      fprintf('!syntax\t\t\tget sit syntax format\n');
 
       fprintf(2, '\nLocal Actions\n');
       fprintf('!{file.txt}msg\t\tsave msg in local memory\n');
@@ -148,6 +149,14 @@ while true
     elseif iscmd('exit', entered_text)
       fprintf('\nThank you for using d02\n\n\n');
       break;
+
+    % cmd: show .sit syntax
+    elseif iscmd('syntax', entered_text)
+      fprintf(2, "Stored Illuminated Text syntax guide:\n");
+      disp('LED_NAME(time_in_sec)LED2_NAME(time_in_sec);');
+      fprintf('divide blink sequence in segments with`); fprintf(2, ';\n');
+      fprintf(2, '\nExample:\n');
+      disp('B1(1)R1(1);R1(1)B2(1);B2(1)R3(1);')
 
     else
         fprintf(2, '\n\t\t ! INVALID COMMAND !\n');
