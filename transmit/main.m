@@ -138,7 +138,7 @@ while true
       fprintf(2, '\nAdvance\n');
       fprintf('![pass]msg\t\t\tencrypt message before sending\n');
       fprintf('!run sit_code\t\tenter sit code\n');
-      fprintf('!syntax\t\t\tget sit syntax format\n');
+      fprintf('!syntax\t\t\t\tget sit syntax format\n');
 
       fprintf(2, '\nLocal Actions\n');
       fprintf('!{file.txt}msg\t\tsave msg in local memory\n');
@@ -186,6 +186,7 @@ while true
   % do not send message if user enters local cmd
   if ~isempty(header)
     full_msg = [preamble, header, extra, msg_bin, postamble];
+    disp([header, extra, msg_bin])
     send_signal(full_msg);
   end
 
