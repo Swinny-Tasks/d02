@@ -1,5 +1,5 @@
 % save passed content in a file 
-function save_txt(user, time, file_name, content)
+function save_txt(user, file_name, content)
   file_name = [file_name, '.sit'];
   time = datetime("now");
 
