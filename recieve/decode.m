@@ -21,7 +21,7 @@ function username = decode(bin_msg, username)
        pswd = get_password(content);
        message = decrypt(pswd, content(1, (length(pswd)*8 + 1):end));
 
-      % normal text; store it as well
+      % normal text; display and store
       case '010'
         file_len = bin2dec(content(1:8));
         file_name = char_convert(content(9:(file_len*8 + 8)));
@@ -31,29 +31,29 @@ function username = decode(bin_msg, username)
 
       % load plain file from memory
       case '011'
-        filename = ['files/', content];
+        filename = ['files/', char_convert(char(content))];
         try
           file = importdata(filename);
           message = string(file(2));
         catch
-          message = ["*cannot find file {", content, "} on the system.*"];
+          message = join(["*cannot find file {", char_convert(char(content)), "} on the system.*"]);
         end
 
       % run SIT from memory
       case '100'
-        filename = ['files/', content];
+        filename = ['files/', char_convert(char(content))];
         try
           file = importdata(filename);
           message = ["LED ACTION: ", string(file(2))];
-          sit_compile(string(file(2)));
+          sit_compile(char_convert(char(file(2))));
         catch
-          message = ["*cannot find file {", content, "} on the system.*"];
+          message = join(["*cannot find file {", char_convert(char(content)), "} on the system.*"]);
         end
 
       % run SIT command
       case '101'
-        message = ["LED ACTION: ", content];
-        sit_compile(content);
+        message = join(["LED ACTION: ", char_convert(char(content))]);
+        sit_compile(char_convert(char(content)));
 
     end
     fprintf(2, '[%s] %s >> ', time, username);
