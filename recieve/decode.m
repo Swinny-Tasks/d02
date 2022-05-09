@@ -1,4 +1,7 @@
 function username = decode(bin_msg, username)
+  c = clock;
+  time = [num2str(c(4)), ':' num2str(c(5)), ':', num2str(c(4))];
+
   % change name
   if isequal(bin_msg(1, 1:4), '0010')
     username = char_convert(bin_msg(1, 5:end));
@@ -23,7 +26,7 @@ function username = decode(bin_msg, username)
         file_len = bin2dec(content(1:8));
         file_name = char_convert(content(9:(file_len*8 + 8)));
         message = char_convert(content((9 + file_len*8):end));
-        save_txt(username, file_name, message);
+        save_txt(username, time, file_name, message);
         fprintf(2, 'saving the message locally in: files/%s\n', file_name);
 
       % load plain file from memory
