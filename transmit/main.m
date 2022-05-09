@@ -154,7 +154,7 @@ while true
     elseif iscmd('syntax', entered_text)
       fprintf(2, "Stored Illuminated Text syntax guide:\n");
       disp('LED_NAME(time_in_sec)LED2_NAME(time_in_sec);');
-      fprintf('divide blink sequence in segments with`); fprintf(2, ';\n');
+      fprintf('divide blink sequence in segments with'); fprintf(2, ';\n');
       fprintf(2, '\nExample:\n');
       disp('B1(1)R1(1);R1(1)B2(1);B2(1)R3(1);')
 
