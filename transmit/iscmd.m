@@ -41,6 +41,6 @@ function command = iscmd(cmd, text)
   end
 
   if ~isempty(look)
-    command = isequal(text(index), look(1)) && contains(text, look(2));
+    command = isequal(text(index), look(index-1)) && contains(text, look(2));
   end
 end
