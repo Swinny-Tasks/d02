@@ -5,7 +5,7 @@ function username = decode(bin_msg, username)
   % change name
   if isequal(bin_msg(1, 1:4), '0010')
     username = char_convert(bin_msg(1, 5:end));
-    fprintf(2, 'now recieving messages from %s\n', username);
+    fprintf(2, '\nnow recieving messages from %s\n\n', username);
 
   else
     header = bin_msg(1, 1:3);
