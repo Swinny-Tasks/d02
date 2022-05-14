@@ -1,6 +1,7 @@
 function username = decode(bin_msg, username)
   c = clock;
   time = [num2str(c(4)), ':' num2str(c(5)), ':', num2str(c(4))];
+  print_message  = true;
 
   % change name
   if isequal(bin_msg(1, 1:4), '0010')
@@ -36,18 +37,20 @@ function username = decode(bin_msg, username)
           file = importdata(filename);
           message = string(file(2));
         catch
-          message = join(["*cannot find file {", char_convert(char(content)), "} on the system.*"]);
+          fprintf("*cannot find file {%s} on the system.*\n",char_convert(char(content)));
+          print_message = false;
         end
 
       % run SIT from memory
       case '100'
         filename = ['files/', char_convert(char(content))];
+        print_message = false;
         try
           file = importdata(filename);
-          message = ["LED ACTION: ", string(file(2))];
+          fprintf(2, "LED ACTION: "); disp(file(2));
           sit_compile(char(file(2)));
         catch
-          message = join(["*cannot find file {", char_convert(char(content)), "} on the system.*"]);
+          fprintf("*cannot find file {%s} on the system.*\n",char_convert(char(content)));
         end
 
       % run SIT command
@@ -56,7 +59,9 @@ function username = decode(bin_msg, username)
         sit_compile(char_convert(char(content)));
 
     end
-    fprintf(2, '[%s] %s >> ', time, username);
-    disp(message);
+    if print_message
+      fprintf(2, '[%s] %s >> ', time, username);
+      disp(message);
+    end
   end
 end
