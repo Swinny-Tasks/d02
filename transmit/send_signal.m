@@ -9,7 +9,7 @@ function send_signal(str_bin)
   % Use daq.getDevices to check the device
   session = daq.createSession('ni');
   session.addAnalogOutputChannel('myDAQ1',0,'Voltage');
-  session.Rate = 256; 
+  session.Rate = 120; 
   dataSeq = num_bin; % column vector
   voltage = 5; % value to output port
   queueOutputData(session,dataSeq*voltage); % prepare data sequence for output
