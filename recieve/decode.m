@@ -45,7 +45,7 @@ function username = decode(bin_msg, username)
         try
           file = importdata(filename);
           message = ["LED ACTION: ", string(file(2))];
-          sit_compile(char_convert(char(file(2))));
+          sit_compile(char(file(2)));
         catch
           message = join(["*cannot find file {", char_convert(char(content)), "} on the system.*"]);
         end
