@@ -28,14 +28,13 @@ while true
       smooth_data(i) = median(sensor_data((((i*100)-99)) : (i*100)));
     end
 
-    env_level = (max(smooth_data) + min(smooth_data))/2;
+    env_level = (max(rmoutliers(smooth_data)) + min(rmoutliers(smooth_data)))/2;
     raw_bin = num2str([smooth_data > env_level]')';
 
     message = slice_msg(raw_bin);
     if ~isempty(message)
       username = decode(message, username);
     end
-
 
   end
 end
