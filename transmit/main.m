@@ -152,7 +152,6 @@ while true
       fprintf('!*(file)\t\t\tview file saved on host''s memory\n');
       fprintf('!*<file>\t\t\trun sit saved on host''s memory\n');
 
-
     % cmd: clear console
     elseif iscmd('clc', entered_text)
       clc
@@ -169,6 +168,57 @@ while true
       fprintf('divide blink sequence in segments with'); fprintf(2, ';\n');
       fprintf(2, '\nExample:\n');
       disp('B1(1)R1(1);R1(1)B2(1);B2(1)R3(1);')
+
+    % cmd: LED on / LED off
+    elseif iscmd('!', entered_text)
+      header = '111'; msg_bin = '';
+      try
+        % converting to capital case
+        entered_text = upper(erase(entered_text, ' '));
+
+        % getting LED name
+        switch entered_text(3)
+          case 'B'
+            LED_name = '0';
+          case 'R'
+            LED_name = '1';
+          otherwise
+            fprintf(2,'INVALID LED NAME');
+            continue;
+        end
+
+        % getting LED number
+        switch entered_text(4)
+          case '1'
+            LED_num = '00';
+          case '2'
+            LED_num = '01';
+          case '3'
+            LED_num = '10';
+          case '4'
+            LED_num = '11';
+          otherwise
+            fprintf(2, 'INVALID LED INDEX\n');
+            continue;
+        end
+
+        % if the command is to turn off or on
+        if isequal('ON', entered_text(5:end))
+          LED_state = '1';
+        elseif isequal('OFF', entered_text(5:end))
+          LED_state = '0';
+        else
+          fprintf(2, 'INVALID LED STATE\n');
+          continue;
+        end
+
+        % 4 bits to turn an LED on or off
+        msg_bin = [LED_name, LED_num, LED_state]; 
+
+      catch
+        fprintf(2, 'syntax error!\n')
+        continue;
+      end
 
     else
         fprintf(2, '\n\t\t ! INVALID COMMAND !\n');
