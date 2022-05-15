@@ -11,14 +11,13 @@ function send_signal(str_bin)
   session.addAnalogOutputChannel('myDAQ1',0,'Voltage');
   session.Rate = 120; 
   dataSeq = num_bin; % column vector
-  voltage = 5; % value to output port
+  voltage = 10; % value to output port
   queueOutputData(session,dataSeq*voltage); % prepare data sequence for output
 
   % if the data could be transmitted under a second
   if (length(str_bin) > session.Rate)
     fprintf(2, "message too big\n");
   else
-    disp(length(str_bin))
     prev_time = -1; % useful to prevent multiple call in a single time frame
     % send message only on even-clock-edge & if message size is reasonable
     while (true)
