@@ -25,10 +25,11 @@ while true
     smooth_data = zeros(1, 186);
     
     for i = 1:186
-      smooth_data(i) = median(sensor_data((((i*100)-99)) : (i*100)));
+      smooth_data(i) = mean(sensor_data((((i*100)-99)) : (i*100)));
     end
+    clear sensor_data;
 
-    env_level = (max(rmoutliers(smooth_data)) + min(rmoutliers(smooth_data)))/2;
+    env_level = (max(smooth_data) + min(smooth_data))/2;
     raw_bin = num2str([smooth_data > env_level]')';
 
     message = slice_msg(raw_bin);
@@ -38,3 +39,4 @@ while true
 
   end
 end
+
