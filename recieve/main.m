@@ -22,8 +22,9 @@ while true
 
     % collect sensor data
     sensor_data = read(s, seconds(1.55), "OutputFormat","Matrix");
+
+    % smoothening recorded data
     smooth_data = zeros(1, 186);
-    
     for i = 1:186
       smooth_data(i) = mean(sensor_data((((i*100)-99)) : (i*100)));
     end
