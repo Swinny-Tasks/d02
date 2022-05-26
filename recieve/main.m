@@ -39,7 +39,6 @@ while true
         username = decode(message, username);
       end
     end
-    break;
 
   end
 end
